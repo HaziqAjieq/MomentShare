@@ -1,9 +1,9 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import mysql from 'mysql2'
-import config from './config.js';
+import config from '../config/config.js';
 
-const connectDB = async() => {
+async function connectDB(){
 const pool = mysql.createPool(config)
 
 pool.getConnection((err, connection) => {
@@ -16,6 +16,5 @@ pool.getConnection((err, connection) => {
  connection.release();
 });
 };
-
 
 export default connectDB;
