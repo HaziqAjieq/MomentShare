@@ -1,30 +1,37 @@
 // code for the 'users' table
-import connectDB from "../db/db.js";
+import databaseQuery from "../db/db.js";
 
-async function createTables() {
-  try {
-    const connection = await connectDB();
 
-    const userTable = `
-  CREATE TABLE IF NOT EXISTS users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(255) UNIQUE NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    password_hash VARCHAR(255) NOT NULL,
-    is_superuser BOOLEAN
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-  )
-`;
+class User {
 
-    await connection.execute(userTable);
-    console.log("Users table created success");
+  constructor(id, username,email, password, is_superuser = false) {
+    this.id = id,
+    this.username = username,
+    this.email = email,
+    this.password = password,
+    this.is_superuser = false
+  }
 
-    connection.release();
-    process.exit(0);
-  } catch (err) {
-    console.error(err.message);
-    process.exit(1);
+  static async createTable() {
+    const userTableQuery = `
+      CREATE TABLE IF NOT EXISTS users (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        username VARCHAR(255) NOT NULL UNIQUE,
+        email VARCHAR(255) NOT NULL UNIQUE,
+        password VARCHAR(255) NOT NULL,
+        is_superuser BOOLEAN,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `;
+
+    try{
+      await databaseQuery.execute(userTableQuery);
+      console.log('TAble created success')
+    } catch(err){
+      console.error('error creating table' , err);
+    }
   }
 }
 
-createTables();
+
+export default User;

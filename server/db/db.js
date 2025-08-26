@@ -1,20 +1,24 @@
-import dotenv from 'dotenv';
-dotenv.config();
-import mysql from 'mysql2'
+
+import mysql from 'mysql2/promise'
 import config from '../config/config.js';
 
-async function connectDB(){
-const pool = mysql.createPool(config)
 
-pool.getConnection((err, connection) => {
-  if(err) {
-    console.log({error : err.message});
-    return
-  }
 
-  console.log('Connected to MySQL database');
- connection.release();
-});
-};
+async function databaseQuery() {
+  let connection;
+  const pool = mysql.createPool(config);
+  try {
+    connection = await pool.getConnection();
+    console.log('database connected');
+  }catch (error) {
+    console.error('Error executing query:', error);
+}finally {
+    if (connection) connection.release(); // Release the connection back to the pool
+}
 
-export default connectDB;
+return
+}
+
+
+
+export default databaseQuery; // Export the function, not a function call
