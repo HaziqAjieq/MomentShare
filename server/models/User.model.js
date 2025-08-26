@@ -1,7 +1,7 @@
 // code for the 'users' table
 import databaseQuery from "../db/db.js";
 
-
+const connection = await databaseQuery();
 class User {
 
   constructor(id, username,email, password, is_superuser = false) {
@@ -25,7 +25,7 @@ class User {
     `;
 
     try{
-      await databaseQuery.execute(userTableQuery);
+      await connection.execute(userTableQuery);
       console.log('TAble created success')
     } catch(err){
       console.error('error creating table' , err);

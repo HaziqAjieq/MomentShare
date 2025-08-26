@@ -1,24 +1,19 @@
+import mysql from "mysql2/promise";
+import config from "../config/config.js";
 
-import mysql from 'mysql2/promise'
-import config from '../config/config.js';
-
-
+const pool = mysql.createPool(config);
 
 async function databaseQuery() {
-  let connection;
-  const pool = mysql.createPool(config);
+ 
   try {
-    connection = await pool.getConnection();
-    console.log('database connected');
-  }catch (error) {
-    console.error('Error executing query:', error);
-}finally {
-    if (connection) connection.release(); // Release the connection back to the pool
+   const  connection = await pool.getConnection();
+    console.log("database connected");
+
+    return connection;
+  } catch (error) {
+    console.error("Error executing query:", error);
+  } 
 }
 
-return
-}
-
-
-
-export default databaseQuery; // Export the function, not a function call
+export {pool , databaseQuery}; // Export the function, not a function call
+export default databaseQuery;
